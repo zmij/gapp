@@ -82,6 +82,22 @@ operator << (std::ostream& out, TrafficSources const& val)
 	return out;
 }
 
+std::ostream&
+operator << (std::ostream& out, ContentInformation const& val)
+{
+	std::ostream::sentry s(out);
+	if (s) {
+		output_param(out, "dl", val.document_location_url);
+		output_param(out, "dh", val.document_host_name);
+		output_param(out, "dp", val.document_path);
+		output_param(out, "dt", val.document_title);
+		output_param(out, "cd", val.content_description);
+
+	}
+	return out;
+}
+
+
 void
 Hit::write(std::ostream& out) const
 {
@@ -94,11 +110,15 @@ Hit::write(std::ostream& out) const
 
 	output_param(out, "sc", session_control);
 
-	// TODO Traffic sources
+	if (traffic_sources.is_initialized()) {
+		out << traffic_sources.get();
+	}
 
 	output_param(out, "ni", non_interaction_hit);
 
-	// TODO Content information
+	if (content_info.is_initialized()) {
+		out << content_info.get();
+	}
 
 	// TODO Custom metrics and dimensions
 

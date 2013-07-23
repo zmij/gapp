@@ -301,6 +301,108 @@ struct TrafficSources {
 std::ostream&
 operator << (std::ostream& out, TrafficSources const& val);
 
+typedef boost::optional< TrafficSources > traffic_sources_opt_t;
+
+struct ContentInformation {
+	/**
+	 * Document location URL
+	 *
+	 * Optional.
+	 *
+	 * Use this parameter to send the full URL (document location) of the page
+	 * on which content resides. You can use the &dh and &dp parameters to
+	 * override the hostname and path + query portions of the document location,
+	 * accordingly. The JavaScript clients determine this parameter using the
+	 * concatenation of the document.location.origin +
+	 * document.location.pathname + document.location.search browser parameters.
+	 * Be sure to remove any user authentication or other private information
+	 * from the URL if present.
+	 *
+	 * Parameter	Value Type	Default Value	Max Length	Supported Hit Types
+	 * dl			text		None			2048 Bytes	all
+	 *
+	 * Example value: http://foo.com/home?a=b
+	 * Example usage: dl=http%3A%2F%2Ffoo.com%2Fhome%3Fa%3Db
+	 *
+	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dl
+	 */
+	text_opt_t			document_location_url;
+
+	/**
+	 * Document Host Name
+	 *
+	 * Optional.
+	 *
+	 * Specifies the hostname from which content was hosted.
+	 *
+	 * Parameter	Value Type	Default Value	Max Length	Supported Hit Types
+	 * dh			text		None			100 Bytes	all
+	 *
+	 * Example value: foo.com
+	 * Example usage: dh=foo.com
+	 *
+	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dh
+	 */
+	text_opt_t			document_host_name;
+
+	/**
+	 * Document Path
+	 *
+	 * Optional.
+	 *
+	 * The path portion of the page URL. Should begin with '/'.
+	 *
+	 * Parameter	Value Type	Default Value	Max Length	Supported Hit Types
+	 * dp			text		None			2048 Bytes	all
+	 *
+	 * Example value: /foo
+	 * Example usage: dp=%2Ffoo
+	 *
+	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dp
+	 */
+	text_opt_t			document_path;
+
+	/**
+	 * Document Title
+	 *
+	 * Optional.
+	 *
+	 * The title of the page / document.
+	 *
+	 * Parameter	Value Type	Default Value	Max Length	Supported Hit Types
+	 * dt			text		None			1500 Bytes	all
+	 *
+	 * Example value: Settings
+	 * Example usage: dt=Settings
+	 *
+	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dt
+	 */
+	text_opt_t			document_title;
+
+	/**
+	 * Content Description
+	 *
+	 * Optional.
+	 *
+	 * If not specified, this will default to the unique URL of the page by
+	 * either using the &dl parameter as-is or assembling it from &dh and &dp.
+	 * App tracking makes use of this for the 'Screen Name' of the appview hit.
+	 *
+	 * Parameter	Value Type	Default Value	Max Length	Supported Hit Types
+	 * cd			text		None			2048 Bytes	all
+	 * Example value: High Scores
+	 * Example usage: cd=High%20Scores
+	 *
+	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#cd
+	 */
+	text_opt_t			content_description;
+};
+
+std::ostream&
+operator << (std::ostream& out, ContentInformation const& val);
+
+typedef boost::optional< ContentInformation > content_info_opt_t;
+
 /**
  * Base payload type.
  * Please note that Protocol version and Tracking ID / Web property ID
@@ -437,7 +539,7 @@ struct Hit {
 	//@}
 	//@{
 	/** @name Traffic Sources */
-
+	traffic_sources_opt_t	traffic_sources;
 
 	//@}
 	//@{
@@ -461,31 +563,7 @@ struct Hit {
 	//@}
 	//@{
 	/** @name Content information */
-	/**
-	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dl
-	 * Max length 2048 bytes
-	 */
-	text_opt_t			document_location_url;
-	/**
-	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dh
-	 * Max length 100 bytes
-	 */
-	text_opt_t			document_host_name;
-	/**
-	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dp
-	 * Max length 2048 bytes
-	 */
-	text_opt_t			document_path;
-	/**
-	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dt
-	 * Max length 1500 bytes
-	 */
-	text_opt_t			document_title;
-	/**
-	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#cd
-	 * Max length 2048 bytes
-	 */
-	text_opt_t			content_description;
+	content_info_opt_t	content_info;
 	//@}
 	//@{
 	/** @name App Tracking */
