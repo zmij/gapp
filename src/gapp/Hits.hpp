@@ -403,6 +403,27 @@ operator << (std::ostream& out, ContentInformation const& val);
 
 typedef boost::optional< ContentInformation > content_info_opt_t;
 
+struct ApplicationInfo {
+	//@{
+	/** @name App Tracking */
+	/**
+	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#an
+	 * Max length 100 bytes
+	 */
+	text_opt_t			application_name;
+	/**
+	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#av
+	 * Max length 100 bytes
+	 */
+	text_opt_t			application_version;
+	//@}
+};
+
+std::ostream&
+operator << (std::ostream& out, ApplicationInfo const& val);
+
+typedef boost::optional< ApplicationInfo > application_info_opt_t;
+
 /**
  * Base payload type.
  * Please note that Protocol version and Tracking ID / Web property ID
@@ -564,19 +585,6 @@ struct Hit {
 	//@{
 	/** @name Content information */
 	content_info_opt_t	content_info;
-	//@}
-	//@{
-	/** @name App Tracking */
-	/**
-	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#an
-	 * Max length 100 bytes
-	 */
-	text_opt_t			application_name;
-	/**
-	 * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#av
-	 * Max length 100 bytes
-	 */
-	text_opt_t			application_version;
 	//@}
 
 	//@{

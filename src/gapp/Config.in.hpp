@@ -17,6 +17,8 @@ const std::string LIB_STRING = "@PROJECT_NAME@/@PROJECT_VERSION@ "
 		"(@CMAKE_SYSTEM@; @CMAKE_SYSTEM_PROCESSOR@) "
 		"boost::asio/@Boost_VERSION@ (Raw async sockets)";
 
+const std::string LIB_VERSION = "@PROJECT_VERSION@";
+
 } // namespace gapp
 
 #endif /* ZMIJ_GAPP_CONFIG_IN_HPP_ */

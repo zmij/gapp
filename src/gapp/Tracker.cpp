@@ -8,6 +8,8 @@
 #include "gapp/Tracker.hpp"
 #include "gapp/Config.hpp"
 
+#include "gapp/detail/http.hpp"
+
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
@@ -21,20 +23,20 @@ const std::string DEFAULT_USER_AGENT = LIB_STRING;
 } // namespace
 
 struct Tracker::Impl {
-	std::string			userAgent;
-	std::string			postUrl;
+	detail::RequestSender	requestSender;
 
-	std::string			trackId;
-	integer_t			version;
+	std::string				trackId;
+	integer_t				version;
 
-	system_info_opt_t	sysInfo;
+	application_info_opt_t	appInfo;
+	system_info_opt_t		sysInfo;
 
 	Impl(std::string const& 	tId,
 		std::string const& 		uAgent,
 		std::string const& 		pUrl,
 		integer_t 				v) :
-		userAgent( uAgent.empty() ? DEFAULT_USER_AGENT : uAgent ),
-		postUrl( pUrl.empty() ? DEFAULT_POST_URL : pUrl),
+		requestSender( (pUrl.empty() ? DEFAULT_POST_URL : pUrl),
+				(uAgent.empty() ? DEFAULT_USER_AGENT : uAgent)),
 		trackId( tId ),
 		version( v )
 	{
@@ -44,23 +46,13 @@ struct Tracker::Impl {
 		if (version < 1) {
 			throw std::runtime_error("Invalid protocol version");
 		}
+
 	}
 
 	void
 	track(Hit const& hit)
 	{
-		// Create request and send it to the collector
-		std::ostringstream req;
-		req << "User-Agent: " << userAgent << "\n"
-			<< "POST " << postUrl << "\n"
-			<< "v=" << version << "&tid=" << trackId
-			<< hit;
-
-		if (sysInfo.is_initialized()) {
-			req << sysInfo.get();
-		}
-
-		std::cerr << "Tracking request:\n" << req.str() << "\n";
+		requestSender.trackHit(version, trackId, hit, appInfo, sysInfo);
 	}
 };
 
@@ -87,13 +79,13 @@ Tracker::trackId() const
 std::string const&
 Tracker::userAgent() const
 {
-	return pimpl_->userAgent;
+	return pimpl_->requestSender.userAgent();
 }
 
 std::string const&
 Tracker::postUrl() const
 {
-	return pimpl_->postUrl;
+	return pimpl_->requestSender.postUrl();
 }
 
 system_info_opt_t&
@@ -106,6 +98,18 @@ system_info_opt_t const&
 Tracker::systemInfo() const
 {
 	return pimpl_->sysInfo;
+}
+
+application_info_opt_t&
+Tracker::applicationInfo()
+{
+	return pimpl_->appInfo;
+}
+
+application_info_opt_t const&
+Tracker::applicationInfo() const
+{
+	return pimpl_->appInfo;
 }
 
 

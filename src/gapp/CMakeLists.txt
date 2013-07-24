@@ -14,7 +14,8 @@ set(
 
 set(
 	GAPP_PRIVATE_HDRS
-	urlencode.hpp
+	detail/urlencode.hpp
+	detail/http.hpp
 )
 
 set(
@@ -23,7 +24,8 @@ set(
 	Types.cpp
 	Hits.cpp
 	Tracker.cpp
-	urlencode.cpp
+	detail/urlencode.cpp
+	detail/http.cpp
 )
 
 set(lib_version "0.0.0")

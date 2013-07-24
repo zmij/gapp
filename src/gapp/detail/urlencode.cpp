@@ -5,13 +5,14 @@
  *      @author: Sergei A. Fedorov (sergei.a.fedorov at gmail dot com)
  */
 
-#include "gapp/urlencode.hpp"
+#include "gapp/detail/urlencode.hpp"
 #include <iostream>
 
 namespace gapp {
+namespace detail {
 
-inline bool
-is_plain_symbol(char c)
+bool
+is_url_symbol(char c)
 {
 	return ('0' <= c && c <= '9') ||
 			('A' <= c && c <= 'Z') ||
@@ -38,7 +39,7 @@ std::ostream&
 urlencode(std::ostream& out, std::string const& str)
 {
 	for (auto p = str.begin(); p != str.end(); ++p) {
-		if ( is_plain_symbol(*p) ) {
+		if ( is_url_symbol(*p) ) {
 			out << *p;
 		} else {
 			output_hex(out, *p);
@@ -47,6 +48,6 @@ urlencode(std::ostream& out, std::string const& str)
 	return out;
 }
 
-
+} // namespace detail
 } // namespace gapp
 

@@ -6,7 +6,7 @@
  */
 
 #include "gapp/Hits.hpp"
-#include "gapp/urlencode.hpp"
+#include "gapp/detail/urlencode.hpp"
 
 #include <iostream>
 
@@ -28,7 +28,7 @@ output_val(std::ostream& out, bool val)
 void
 output_val(std::ostream& out, std::string const& val)
 {
-	urlencode(out, val);
+	detail::urlencode(out, val);
 }
 
 template < typename T >
@@ -98,6 +98,16 @@ operator << (std::ostream& out, ContentInformation const& val)
 	return out;
 }
 
+std::ostream&
+operator << (std::ostream& out, ApplicationInfo const& val)
+{
+	std::ostream::sentry s(out);
+	if (s) {
+		output_param(out, "an", val.application_name);
+		output_param(out, "av", val.application_version);
+	}
+	return out;
+}
 
 void
 Hit::write(std::ostream& out) const

@@ -51,6 +51,12 @@ public:
 
 	system_info_opt_t const&
 	systemInfo() const;
+
+	application_info_opt_t&
+	applicationInfo();
+
+	application_info_opt_t const&
+	applicationInfo() const;
 private:
 	struct Impl;
 	typedef boost::shared_ptr<Impl> PImpl;
