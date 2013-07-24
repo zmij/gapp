@@ -24,3 +24,8 @@ add_subdirectory(src)
 # TODO Check for test build necessity
 enable_testing()
 add_subdirectory(t)
+
+install(
+	FILES Findgapp.cmake
+	DESTINATION share/cmake/Modules
+)
