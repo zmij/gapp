@@ -13,11 +13,17 @@ set(
 )
 
 set(
+	GAPP_PRIVATE_HDRS
+	urlencode.hpp
+)
+
+set(
 	GAPP_SRCS
 	gapp.cpp
 	Types.cpp
 	Hits.cpp
 	Tracker.cpp
+	urlencode.cpp
 )
 
 set(lib_version "0.0.0")

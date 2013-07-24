@@ -69,11 +69,12 @@ BOOST_AUTO_TEST_CASE( CheckTracking )
 		evt.hit_type = HIT_EVENT;
 
 		evt.event_category = "Quest";
-		evt.event_action = "start";
+		evt.event_action = "quest start";
+		evt.event_label = "Very long quest (Find the Answer to the Ultimate Question of Life, the Universe, and Everything)";
 
 		tracker.track(evt);
 
-		evt.event_action = "stop";
+		evt.event_action = "quest stop (100%)";
 		tracker.track(evt);
 	}
 }

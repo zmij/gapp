@@ -6,6 +6,8 @@
  */
 
 #include "gapp/Hits.hpp"
+#include "gapp/urlencode.hpp"
+
 #include <iostream>
 
 namespace gapp {
@@ -26,8 +28,7 @@ output_val(std::ostream& out, bool val)
 void
 output_val(std::ostream& out, std::string const& val)
 {
-	// TODO Urlescape
-	out << val;
+	urlencode(out, val);
 }
 
 template < typename T >
