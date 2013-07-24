@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(gapp)
 
-set(PROJECT_VERSION 1.0)
+set(PROJECT_VERSION 1.1)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
@@ -27,5 +27,5 @@ add_subdirectory(t)
 
 install(
 	FILES Findgapp.cmake
-	DESTINATION share/cmake/Modules
+	DESTINATION ${CMAKE_ROOT}/Modules
 )

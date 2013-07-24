@@ -10,6 +10,7 @@ set(
 	Types.hpp
 	Hits.hpp
 	Tracker.hpp
+	${CMAKE_CURRENT_BINARY_DIR}/Config.hpp
 )
 
 set(
