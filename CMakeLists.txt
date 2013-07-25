@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(gapp)
 
-set(PROJECT_VERSION 1.1)
+set(PROJECT_VERSION 1.2)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
