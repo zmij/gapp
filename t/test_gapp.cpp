@@ -10,6 +10,10 @@
 #define BOOST_TEST_MODULE TestGapp
 
 #include <boost/test/unit_test.hpp>
+
+#include <boost/asio/ip/host_name.hpp>
+#include <boost/functional/hash.hpp>
+
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/random_generator.hpp>
@@ -131,44 +135,44 @@ BOOST_AUTO_TEST_CASE( CheckTracking )
 
 	tracker.applicationInfo() = appInfo;
 
-	boost::uuids::random_generator gen;
+	std::string hostName = boost::asio::ip::host_name();
+	boost::hash< std::string > string_hash;
+
 	std::ostringstream id_str;
-	id_str << gen();
+	id_str << string_hash(hostName);
+	std::string clientId = id_str.str();
+	
+	std::cerr << "Hostname " << hostName << " client id " << clientId << "\n";
 
 	Hit pageView;
-	pageView.client_id = id_str.str();
+	pageView.client_id = clientId;
 	pageView.hit_type = HIT_APPVIEW;
 	pageView.content_info = contentInfo;
 
 	tracker.track(pageView);
 
-//	std::cerr << "Sleep 10 seconds\n";
-//	sleep(10);
 	tracker.track(pageView);
-//	std::cerr << "Sleep 10 seconds\n";
-//	sleep(10);
+
+	Event evt;
+	evt.client_id = clientId;
+	evt.hit_type = HIT_EVENT;
+
+	evt.content_info = contentInfo;
+
+	evt.event_category = "Test";
+	evt.event_label = "Run library test";
 
 	for (int i = 0; i < 10; ++i)
 	{
-		Event evt;
-		evt.client_id = id_str.str();
-		evt.hit_type = HIT_EVENT;
-
-		evt.content_info = contentInfo;
-
-		evt.event_category = "Test";
 		evt.event_action = "test start";
-		evt.event_label = "Run library test";
 
 		tracker.track(evt);
-//		std::cerr << "Sleep 1 second\n";
-//		sleep(1);
 
 		evt.event_action = "test stop";
 		tracker.track(evt);
-//		std::cerr << "Sleep 1 second\n";
-//		sleep(1);
 	}
 	//pageView.session_control = "end";
 	tracker.track(pageView);
+	evt.event_action = "test finish";
+	tracker.track(evt);
 }
