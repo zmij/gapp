@@ -65,7 +65,7 @@ Tracker::Tracker( std::string const& tId,
 }
 
 void
-Tracker::track(Hit const& hit)
+Tracker::track(Hit const& hit) const
 {
 	pimpl_->track(hit);
 }
