@@ -18,6 +18,12 @@
 namespace gapp {
 namespace detail {
 
+namespace {
+
+const int HTTP_OK = 200;
+
+} // namespace
+
 namespace asio = boost::asio;
 using boost::asio::ip::tcp;
 
@@ -59,23 +65,7 @@ Uri::Uri(std::string const& u)
 	}
 }
 
-struct SocketConnection {
-	tcp::socket				socket;
-
-	SocketConnection( asio::io_service& io_service, tcp::resolver::iterator endpoint_iterator ) :
-		socket(io_service)
-	{
-		asio::connect(socket, endpoint_iterator);
-	}
-
-	~SocketConnection()
-	{
-		socket.close();
-	}
-};
-
 struct RequestSender::Impl {
-	//typedef boost::shared_ptr< SocketConnection >
 	std::string				postUrl;
 	Uri						postUri;
 	std::string				userAgent;
@@ -137,21 +127,38 @@ struct RequestSender::Impl {
 			asio::write( socket, req_header );
 			asio::write( socket, req_body );
 
-			#ifdef DEBUG_RESPONCE_OUTPUT
-			std::cerr << std::setw(80) << std::setfill('=') << "=\n";
-			// Read the responce
+			#ifdef CHECK_RESPONSE
+			// Check the responce
 			asio::streambuf response;
-			boost::system::error_code error;
-			while (asio::read(socket, response, asio::transfer_at_least(1), error)) {
-				std::cerr << &response;
+			asio::read_until( socket, response, "\r\n" );
+
+			std::istream response_stream(&response);
+			std::string http_version;
+			response_stream >> http_version;
+			unsigned int status_code;
+			response_stream >> status_code;
+			std::string status_message;
+			std::getline(response_stream, status_message);
+
+			if (!response_stream || http_version.find("HTTP/") != 0) {
+				throw std::runtime_error("Invalid response");
 			}
-			if (error != asio::error::eof) {
-				throw boost::system::system_error(error);
+
+			if (status_code != HTTP_OK) {
+				std::ostringstream err;
+				err << "Response status " << status_code << " message "
+						<< status_message;
+
+				throw std::runtime_error(err.str());
 			}
-			std::cerr << "\n" << std::setw(80) << std::setfill('=') << "=\n";
-			#endif
+			#endif /* CHECK_RESPONSE */
 		} catch (std::exception const& e) {
-			std::cerr << "Exception: " << e.what() << "\n";
+			std::cerr << "Exception while sending hit to Google Analytics: "
+					<< e.what() << "\n";
+			throw;
+		} catch (...) {
+			std::cerr << "Unexpected exception while sending hit to Google Analytics\n";
+			throw;
 		}
 	}
 };
