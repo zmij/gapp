@@ -52,6 +52,11 @@ set_target_properties(
 	SOVERSION 0
 )
 
+target_link_libraries(
+	gapp
+	${Boost_LIBRARIES}
+)
+
 install(
 	TARGETS gapp
 	LIBRARY DESTINATION lib
