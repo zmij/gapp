@@ -15,7 +15,7 @@ namespace gapp {
 namespace detail {
 
 std::ostream&
-urlencode(std::ostream&, std::string const&);
+urlencode(std::ostream&, std::string const&, std::string const& ignore = std::string());
 
 bool
 is_url_symbol(char c);
