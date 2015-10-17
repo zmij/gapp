@@ -8,13 +8,9 @@
 #ifndef ZMIJ_GAPP_HPP_
 #define ZMIJ_GAPP_HPP_
 
-#include <gapp/Hits.hpp>
-#include <gapp/Tracker.hpp>
+#include <gapp/tracker.hpp>
 
 namespace gapp {
-
-
-
 } // namespace gapp
 
 #endif /* ZMIJ_GAPP_HPP_ */

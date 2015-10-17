@@ -5,10 +5,10 @@
  *      @author: Sergei A. Fedorov (sergei.a.fedorov at gmail dot com)
  */
 
-#include "gapp/Tracker.hpp"
-#include "gapp/Config.hpp"
+#include "tracker.hpp"
+#include <gapp/config.hpp>
 
-#include "gapp/detail/http.hpp"
+#include <gapp/detail/http.hpp>
 
 #include <stdexcept>
 #include <iostream>
@@ -22,7 +22,7 @@ const std::string DEFAULT_USER_AGENT = LIB_STRING;
 
 } // namespace
 
-struct Tracker::Impl {
+struct tracker::impl {
 	detail::RequestSender	requestSender;
 
 	std::string				trackId;
@@ -31,7 +31,7 @@ struct Tracker::Impl {
 	application_info_opt_t	appInfo;
 	system_info_opt_t		sysInfo;
 
-	Impl(std::string const& 	tId,
+	impl(std::string const& 	tId,
 		std::string const& 		uAgent,
 		std::string const& 		pUrl,
 		integer_t 				v) :
@@ -56,58 +56,58 @@ struct Tracker::Impl {
 	}
 };
 
-Tracker::Tracker( std::string const& tId,
+tracker::tracker( std::string const& tId,
 		std::string const& uAgent,
 		std::string const& pUrl,
 		integer_t v ) :
-				pimpl_( new Impl(tId, uAgent, pUrl, v) )
+				pimpl_( new impl(tId, uAgent, pUrl, v) )
 {
 }
 
 void
-Tracker::track(Hit const& hit) const
+tracker::track(Hit const& hit)
 {
 	pimpl_->track(hit);
 }
 
 std::string const&
-Tracker::trackId() const
+tracker::track_id() const
 {
 	return pimpl_->trackId;
 }
 
 std::string const&
-Tracker::userAgent() const
+tracker::user_agent() const
 {
 	return pimpl_->requestSender.userAgent();
 }
 
 std::string const&
-Tracker::postUrl() const
+tracker::post_url() const
 {
 	return pimpl_->requestSender.postUrl();
 }
 
 system_info_opt_t&
-Tracker::systemInfo()
+tracker::system_info()
 {
 	return pimpl_->sysInfo;
 }
 
 system_info_opt_t const&
-Tracker::systemInfo() const
+tracker::system_info() const
 {
 	return pimpl_->sysInfo;
 }
 
 application_info_opt_t&
-Tracker::applicationInfo()
+tracker::application_info()
 {
 	return pimpl_->appInfo;
 }
 
 application_info_opt_t const&
-Tracker::applicationInfo() const
+tracker::application_info() const
 {
 	return pimpl_->appInfo;
 }

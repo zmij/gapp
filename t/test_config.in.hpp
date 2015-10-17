@@ -12,7 +12,7 @@
 
 namespace gapp_test {
 
-const std::string TRACK_ID = "@TRACK_ID@";
+const std::string TRACK_ID = "@TEST_TRACK_ID@";
 
 const std::string MOCK_URL = "@MOCK_URL@";
 

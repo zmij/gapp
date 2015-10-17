@@ -5,7 +5,7 @@
  *      @author: Sergei A. Fedorov (sergei.a.fedorov at gmail dot com)
  */
 
-#include "gapp/Hits.hpp"
+#include "hits.hpp"
 #include "gapp/detail/urlencode.hpp"
 
 #include <iostream>

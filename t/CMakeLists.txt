@@ -8,15 +8,15 @@ set(Boost_USE_STATIC_LIBS ON)
 
 find_package( Boost COMPONENTS unit_test_framework REQUIRED )
 
-if (NOT TRACK_ID)
-	set( TRACK_ID UA-42658449-2 )
+if (NOT TEST_TRACK_ID)
+	set( TEST_TRACK_ID UA-42658449-1 )
 endif()
 
 if (NOT MOCK_URL)
 	set( MOCK_URL http://www.google-analytics.com/collect )
 endif()
 
-configure_file(TestConfig.in.hpp TestConfig.hpp)
+configure_file(test_config.in.hpp test_config.hpp)
 
 include_directories(
 	${Boost_INCLUDE_DIRS}

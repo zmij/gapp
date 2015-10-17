@@ -5,7 +5,7 @@
  *      @author: Sergei A. Fedorov (sergei.a.fedorov at gmail dot com)
  */
 
-#include "TestConfig.hpp"
+#include "test_config.hpp"
 
 #define BOOST_TEST_MODULE TestGapp
 
@@ -91,23 +91,23 @@ BOOST_AUTO_TEST_CASE( CheckUrlParsing )
 
 BOOST_AUTO_TEST_CASE( CheckTrackerConstruction )
 {
-	gapp::Tracker defaults(gapp_test::TRACK_ID);
+	gapp::tracker defaults(gapp_test::TRACK_ID);
 
-	BOOST_REQUIRE_EQUAL(defaults.trackId(), gapp_test::TRACK_ID);
-	BOOST_REQUIRE_EQUAL(defaults.userAgent(), gapp::LIB_STRING);
-	BOOST_REQUIRE_EQUAL(defaults.postUrl(), gapp::DEFAULT_POST_URL);
+	BOOST_REQUIRE_EQUAL(defaults.track_id(), gapp_test::TRACK_ID);
+	BOOST_REQUIRE_EQUAL(defaults.user_agent(), gapp::LIB_STRING);
+	BOOST_REQUIRE_EQUAL(defaults.post_url(), gapp::DEFAULT_POST_URL);
 
-	gapp::Tracker tracker(
+	gapp::tracker track(
 			gapp_test::TRACK_ID,
 			gapp_test::LIB_STRING,
 			gapp_test::MOCK_URL
 	);
 
-	BOOST_REQUIRE_EQUAL(tracker.trackId(), gapp_test::TRACK_ID);
-	BOOST_REQUIRE_EQUAL(tracker.userAgent(), gapp_test::LIB_STRING);
-	BOOST_REQUIRE_EQUAL(tracker.postUrl(), gapp_test::MOCK_URL);
+	BOOST_REQUIRE_EQUAL(track.track_id(), gapp_test::TRACK_ID);
+	BOOST_REQUIRE_EQUAL(track.user_agent(), gapp_test::LIB_STRING);
+	BOOST_REQUIRE_EQUAL(track.post_url(), gapp_test::MOCK_URL);
 
-	BOOST_REQUIRE_THROW( gapp::Tracker(""), std::runtime_error );
+	BOOST_REQUIRE_THROW( gapp::tracker(""), std::runtime_error );
 }
 
 BOOST_AUTO_TEST_CASE( CheckTracking )
@@ -127,13 +127,13 @@ BOOST_AUTO_TEST_CASE( CheckTracking )
         std::string( "Test Application Console" )
 	};
 
-	Tracker tracker(
+	tracker track(
 			gapp_test::TRACK_ID,
 			gapp_test::LIB_STRING,
 			gapp_test::MOCK_URL
 	);
 
-	tracker.applicationInfo() = appInfo;
+	track.application_info() = appInfo;
 
 	std::string hostName = boost::asio::ip::host_name();
 	boost::hash< std::string > string_hash;
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE( CheckTracking )
 	pageView.hit_type = HIT_APPVIEW;
 	pageView.content_info = contentInfo;
 
-	tracker.track(pageView);
+	track.track(pageView);
 
 	tracker.track(pageView);
 

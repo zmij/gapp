@@ -11,9 +11,9 @@
 #include <string>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
-#include <gapp/Hits.hpp>
+#include <gapp/hits.hpp>
 
 namespace gapp {
 
@@ -22,14 +22,14 @@ namespace gapp {
  *
  * Synopsis:
  *
- * Tracker tracker("UA-XXXXXX-X");
+ * tracker track("UA-XXXXXX-X");
  *
  * Event evt {...};
  * tracker.track(evt);
  */
-class Tracker : boost::noncopyable {
+class tracker : boost::noncopyable {
 public:
-	Tracker( std::string const& trackId,
+	tracker( std::string const& trackId,
 			std::string const& userAgent = std::string(),
 			std::string const& postUrl = std::string(),
 			integer_t version = 1 );
@@ -38,30 +38,30 @@ public:
 	track(Hit const&) const;
 
 	std::string const&
-	trackId() const;
+	track_id() const;
 
 	std::string const&
-	userAgent() const;
+	user_agent() const;
 
 	std::string const&
-	postUrl() const;
+	post_url() const;
 
 	system_info_opt_t&
-	systemInfo();
+	system_info();
 
 	system_info_opt_t const&
-	systemInfo() const;
+	system_info() const;
 
 	application_info_opt_t&
-	applicationInfo();
+	application_info();
 
 	application_info_opt_t const&
-	applicationInfo() const;
+	application_info() const;
 private:
-	struct Impl;
-	typedef boost::shared_ptr<Impl> PImpl;
+	struct impl;
+	typedef std::shared_ptr<impl> pimpl;
 private:
-	PImpl pimpl_;
+	pimpl pimpl_;
 };
 
 } // namespace gapp

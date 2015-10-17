@@ -4,13 +4,17 @@
 
 cmake_minimum_required(VERSION 2.6)
 
+configure_file(config.in.hpp config.hpp)
+
+
 set(
 	GAPP_HDRS
+	asio_config.hpp
 	gapp.hpp
-	Types.hpp
-	Hits.hpp
-	Tracker.hpp
-	${CMAKE_CURRENT_BINARY_DIR}/Config.hpp
+	types.hpp
+	hits.hpp
+	tracker.hpp
+	${CMAKE_CURRENT_BINARY_DIR}/config.hpp
 )
 
 set(
@@ -22,19 +26,14 @@ set(
 set(
 	GAPP_SRCS
 	gapp.cpp
-	Types.cpp
-	Hits.cpp
-	Tracker.cpp
+		types.cpp
+		hits.cpp
+	tracker.cpp
 	detail/urlencode.cpp
 	detail/http.cpp
 )
 
 set(lib_version "0.0.0")
-
-configure_file(
-	Config.in.hpp
-	Config.hpp
-)
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/src
@@ -45,7 +44,9 @@ add_library(
 	gapp SHARED
 	${GAPP_SRCS} ${GAPP_HDRS}
 )
-
+if(NOT STANDALONE_ASIO)
+	target_link_libraries(gapp ${Boost_SYSTEM_LIBRARIES})
+endif()
 set_target_properties(
 	gapp PROPERTIES
 	VERSION ${lib_version}

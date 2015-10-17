@@ -5,7 +5,7 @@
  *      @author: Sergei A. Fedorov (sergei.a.fedorov at gmail dot com)
  */
 
-#include "gapp/Types.hpp"
+#include "types.hpp"
 
 #include <iostream>
 

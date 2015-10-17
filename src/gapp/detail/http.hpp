@@ -5,14 +5,14 @@
  *      @author: Sergei A. Fedorov (sergei.a.fedorov at gmail dot com)
  */
 
-#ifndef OPENGAMES_HTTP_HPP_
-#define OPENGAMES_HTTP_HPP_
+#ifndef GAPP_DETAIL_HTTP_HPP_
+#define GAPP_DETAIL_HTTP_HPP_
 
 #include <string>
+#include <memory>
 
-#include <boost/shared_ptr.hpp>
-
-#include <gapp/Hits.hpp>
+#include <gapp/types.hpp>
+#include <gapp/hits.hpp>
 
 namespace gapp {
 namespace detail {
@@ -41,13 +41,13 @@ public:
 			application_info_opt_t const& appInfo,
 			system_info_opt_t const& sysInfo );
 private:
-	struct Impl;
-	typedef boost::shared_ptr<Impl> PImpl;
+	struct impl;
+	typedef std::shared_ptr<impl> pimpl;
 private:
-	PImpl pimpl_;
+	pimpl pimpl_;
 };
 
 } // namespace detail
 } // namespace gapp
 
-#endif /* OPENGAMES_HTTP_HPP_ */
+#endif /* GAPP_DETAIL_HTTP_HPP_ */

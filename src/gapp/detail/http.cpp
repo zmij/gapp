@@ -5,13 +5,13 @@
  *      @author: Sergei A. Fedorov (sergei.a.fedorov at gmail dot com)
  */
 
-#include "gapp/detail/http.hpp"
-#include "gapp/detail/urlencode.hpp"
+#include <gapp/detail/http.hpp>
+#include <gapp/detail/urlencode.hpp>
 
-#include <boost/asio.hpp>
-//#include <boost/thread.hpp>
+#include <gapp/asio_config.hpp>
 
 #include <stdexcept>
+#include <iostream>
 #include <sstream>
 #include <iomanip>
 
@@ -24,7 +24,6 @@ const int HTTP_OK = 200;
 
 } // namespace
 
-namespace asio = boost::asio;
 using boost::asio::ip::tcp;
 
 Uri::Uri(std::string const& u)
@@ -65,7 +64,23 @@ Uri::Uri(std::string const& u)
 	}
 }
 
-struct RequestSender::Impl {
+struct SocketConnection {
+	tcp::socket				socket;
+
+	SocketConnection( asio::io_service& io_service, tcp::resolver::iterator endpoint_iterator ) :
+		socket(io_service)
+	{
+		asio::connect(socket, endpoint_iterator);
+	}
+
+	~SocketConnection()
+	{
+		socket.close();
+	}
+};
+
+struct RequestSender::impl {
+	//typedef boost::shared_ptr< SocketConnection >
 	std::string				postUrl;
 	Uri						postUri;
 	std::string				userAgent;
@@ -73,7 +88,7 @@ struct RequestSender::Impl {
 	asio::io_service		io_service;
 	tcp::resolver::iterator	endpoint_iterator;
 
-	Impl(std::string const& postUrl, std::string const& userAgent) :
+	impl(std::string const& postUrl, std::string const& userAgent) :
 		postUrl(postUrl), postUri(postUrl), userAgent(userAgent)
 	{
 		tcp::resolver resolver(io_service);
@@ -130,26 +145,12 @@ struct RequestSender::Impl {
 			#ifdef CHECK_RESPONSE
 			// Check the responce
 			asio::streambuf response;
-			asio::read_until( socket, response, "\r\n" );
-
-			std::istream response_stream(&response);
-			std::string http_version;
-			response_stream >> http_version;
-			unsigned int status_code;
-			response_stream >> status_code;
-			std::string status_message;
-			std::getline(response_stream, status_message);
-
-			if (!response_stream || http_version.find("HTTP/") != 0) {
-				throw std::runtime_error("Invalid response");
+			error_code error;
+			while (asio::read(socket, response, asio::transfer_at_least(1), error)) {
+				std::cerr << &response;
 			}
-
-			if (status_code != HTTP_OK) {
-				std::ostringstream err;
-				err << "Response status " << status_code << " message "
-						<< status_message;
-
-				throw std::runtime_error(err.str());
+			if (error != asio::error::eof) {
+				throw system_error(error);
 			}
 			#endif /* CHECK_RESPONSE */
 		} catch (std::exception const& e) {
@@ -165,7 +166,7 @@ struct RequestSender::Impl {
 
 RequestSender::RequestSender(std::string const& postUrl,
 		std::string const& userAgent) :
-		pimpl_(new Impl(postUrl, userAgent))
+		pimpl_(new impl(postUrl, userAgent))
 {
 }
 

@@ -8,7 +8,7 @@
 #ifndef ZMIJ_GAPP_HITS_HPP_
 #define ZMIJ_GAPP_HITS_HPP_
 
-#include <gapp/Types.hpp>
+#include "types.hpp"
 
 namespace gapp {
 

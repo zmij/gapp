@@ -12,7 +12,7 @@
 
 namespace gapp {
 
-const std::string DEFAULT_POST_URL = "http://www.google-analytics.com/collect";
+const std::string DEFAULT_POST_URL = "@GOOGLE_POST_URL@";
 const std::string LIB_STRING = "@PROJECT_NAME@/@PROJECT_VERSION@ "
 		"(@CMAKE_SYSTEM@; @CMAKE_SYSTEM_PROCESSOR@) "
 		"boost::asio/@Boost_VERSION@ (Raw async sockets)";
