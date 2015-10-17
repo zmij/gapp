@@ -35,7 +35,7 @@ public:
 			integer_t version = 1 );
 
 	void
-	track(Hit const&);
+	track(Hit const&) const;
 
 	std::string const&
 	trackId() const;

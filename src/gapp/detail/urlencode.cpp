@@ -7,6 +7,7 @@
 
 #include "gapp/detail/urlencode.hpp"
 #include <iostream>
+#include <algorithm>
 
 namespace gapp {
 namespace detail {
@@ -36,10 +37,10 @@ output_hex(std::ostream& out, char c)
 }
 
 std::ostream&
-urlencode(std::ostream& out, std::string const& str)
+urlencode(std::ostream& out, std::string const& str, std::string const& ignore)
 {
 	for (auto p = str.begin(); p != str.end(); ++p) {
-		if ( is_url_symbol(*p) ) {
+		if ( is_url_symbol(*p) || ignore.find(*p) != std::string::npos ) {
 			out << *p;
 		} else {
 			output_hex(out, *p);

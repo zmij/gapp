@@ -13,7 +13,7 @@ if (NOT TRACK_ID)
 endif()
 
 if (NOT MOCK_URL)
-	set( MOCK_URL http://localhost )
+	set( MOCK_URL http://www.google-analytics.com/collect )
 endif()
 
 configure_file(TestConfig.in.hpp TestConfig.hpp)

@@ -12,6 +12,12 @@
 
 namespace gapp {
 
+namespace {
+
+const std::string IGNORE_IN_PATH = "/";
+
+} // namespace
+
 template < typename T >
 void
 output_val(std::ostream& out, T val)
@@ -46,6 +52,16 @@ output_param(std::ostream& out, std::string const& name, boost::optional< T > co
 	if (p.is_initialized()) {
 		out << "&" << name << "=";
 		output_val(out, p.get());
+	}
+}
+
+void
+output_param(std::ostream& out, std::string const& name, text_opt_t const& p,
+		std::string const& ignore)
+{
+	if (p.is_initialized()) {
+		out << "&" << name << "=";
+		detail::urlencode(out, p.get(), ignore);
 	}
 }
 
@@ -88,9 +104,9 @@ operator << (std::ostream& out, ContentInformation const& val)
 {
 	std::ostream::sentry s(out);
 	if (s) {
-		output_param(out, "dl", val.document_location_url);
+		output_param(out, "dl", val.document_location_url, IGNORE_IN_PATH);
 		output_param(out, "dh", val.document_host_name);
-		output_param(out, "dp", val.document_path);
+		output_param(out, "dp", val.document_path, IGNORE_IN_PATH);
 		output_param(out, "dt", val.document_title);
 		output_param(out, "cd", val.content_description);
 
